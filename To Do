@@ -1,6 +1,6 @@
 PAGES TO CREATE
-- Dashboard
-- Wallet (- adding transaction/amount)
-- Goals
-- Statistics
-- Profile
+- Dashboard : It shows Total Balance, Income, Expenses.
+- Wallet : adding transaction/amount.
+- Goals : Savings tracking, Goal name, Target amount, current saved.
+- Statistics : charts and summaries.
+- Profile : Name, themes.
