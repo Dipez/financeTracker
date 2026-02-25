@@ -3,4 +3,4 @@ PAGES TO CREATE
 - Wallet : adding transaction/amount.
 - Goals : Savings tracking, Goal name, Target amount, current saved.
 - Statistics : charts and summaries.
-- Profile : Name, themes.
+- Profile : Name, themes, other settings.
