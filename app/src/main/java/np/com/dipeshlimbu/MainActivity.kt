@@ -3,45 +3,56 @@ package np.com.dipeshlimbu
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import np.com.dipeshlimbu.ui.theme.FinanceTrackerTheme
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
+
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+
+import np.com.dipeshlimbu.model.AuthenticationRepository
+import np.com.dipeshlimbu.ui.DashboardScreen
+import np.com.dipeshlimbu.ui.LoginScreen
+import np.com.dipeshlimbu.viewmodel.LoginViewModel
+import np.com.dipeshlimbu.viewmodel.LoginViewModelFactory
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
         setContent {
-            FinanceTrackerTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+
+            val navController = rememberNavController()
+
+            val loginViewModel: LoginViewModel = viewModel(
+                factory = LoginViewModelFactory(AuthenticationRepository())
+            )
+
+            val errorMessage by loginViewModel.errorMessage
+
+            NavHost(
+                navController = navController,
+                startDestination = "login"
+            ) {
+
+                composable("login") {
+                    LoginScreen(
+                        onLogin = { username: String, password: String ->
+                            loginViewModel.login(username, password)
+
+                            if (loginViewModel.isLoginSuccessful.value) {
+                                navController.navigate("dashboard")
+                            }
+                        },
+                        errorMessage = errorMessage
                     )
+                }
+
+                composable("dashboard") {
+                    DashboardScreen()
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FinanceTrackerTheme {
-        Greeting("Android")
     }
 }
